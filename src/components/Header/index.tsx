@@ -2,7 +2,7 @@ import { Flex, Text } from '@chakra-ui/react'
 import Logo from './Logo';
 import NotificationsNav from './NotificationsNav';
 import Profile from './Profile';
-import SearchBox from './SeachBox';
+import SearchBox from './SearchBox';
 
 
 export default function Header() {

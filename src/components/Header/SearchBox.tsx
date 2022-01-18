@@ -1,8 +1,8 @@
-import { Icon, Input, Flex } from "@chakra-ui/react";
+import { Flex, Icon, Input } from "@chakra-ui/react";
 import { RiSearchLine } from "react-icons/ri";
 
-export default function SearchBox () {
-    return (
+export default function SearchBox(){
+    return(
         <Flex
                 as="label"
                 flex="1"
@@ -27,5 +27,6 @@ export default function SearchBox () {
 
                 <Icon as={RiSearchLine} fontSize="20" />
             </Flex>
+
     )
 }
