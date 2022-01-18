@@ -1,4 +1,5 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Text, useBreakpointValue } from '@chakra-ui/react'
+import { truncate } from 'fs/promises';
 import Logo from './Logo';
 import NotificationsNav from './NotificationsNav';
 import Profile from './Profile';
@@ -6,6 +7,11 @@ import SearchBox from './SearchBox';
 
 
 export default function Header() {
+
+    const isWideVersion = useBreakpointValue({
+        base: false,
+        lg: true,
+    })
     return (
         <Flex
             as='header'
@@ -17,9 +23,11 @@ export default function Header() {
             px="6"
             align="center"
         >
-            <Logo/>
+            <Logo />
 
-            <SearchBox/>
+            {isWideVersion &&
+                <SearchBox />
+            }
 
             <Flex
                 align="center"
@@ -27,7 +35,7 @@ export default function Header() {
             >
                 <NotificationsNav />
 
-                <Profile />
+                <Profile showProfileData={isWideVersion} />
             </Flex>
         </Flex>
     )
