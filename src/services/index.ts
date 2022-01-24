@@ -19,16 +19,16 @@ export function makeServer() {
                     return `User ${i + 1}`
                 },
                 email() {
-                    faker.internet.email().toLowerCase()
+                  return faker.internet.email().toLowerCase()
                 },
                 createdAt() {
-                    faker.date.recent(10)
+                  return faker.date.recent(10)
                 },
             })
         },
 
         seeds(server) {
-            server.createList('user', 200)
+            server.createList('user', 10)
         },
 
         routes() {
@@ -39,7 +39,7 @@ export function makeServer() {
             this.get('/users');
             this.post('/users');
 
-            this.namespace = "";
+            this.namespace = '';
             this.passthrough()
         }
 
