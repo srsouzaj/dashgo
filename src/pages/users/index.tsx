@@ -13,9 +13,10 @@ import {
     Tr,
     Text,
     useBreakpointValue,
-    Spinner
+    Spinner,
+    Link
 } from "@chakra-ui/react";
-import Link from "next/link";
+import NextLink from "next/Link";
 import { useState } from "react";
 import { RiAddLine } from "react-icons/ri";
 
@@ -23,7 +24,9 @@ import { RiAddLine } from "react-icons/ri";
 import Header from '../../components/Header';
 import { Pagination } from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
+import { api } from "../../services/api";
 import { useUsers } from "../../services/hooks/useUsers";
+import { queryClient } from "../../services/mirage/queryClient";
 
 export default function UserList() {
     const [page, setPage] = useState(1);
@@ -33,6 +36,17 @@ export default function UserList() {
         base: false,
         lg: true,
     })
+
+    async function handlePrefetchUser(userId: string) {
+        await queryClient.prefetchQuery(['user', userId], async () => {
+            const response = await api.get(`users/${userId}`)
+
+            return response.data;
+        }, {
+            staleTime: 1000 * 60 * 10
+        })
+
+    }
 
     return (
         <Box>
@@ -44,7 +58,7 @@ export default function UserList() {
                 <Box flex="1" borderRadius={8} bg="gray.800" p="8">
                     <Flex mb="8" justify="space-between" align="center">
                         <Heading size="lg" fontWeight="normal">Usuários</Heading>
-                        <Link href="/users/create" passHref>
+                        <NextLink href="/users/create" passHref>
                             <Button
                                 as="a"
                                 size="sm"
@@ -54,7 +68,7 @@ export default function UserList() {
                             >
                                 Criar Novo
                             </Button>
-                        </Link>
+                        </NextLink>
                     </Flex>
                     {isLoading ? (
                         <Flex justify='center'>
@@ -86,7 +100,9 @@ export default function UserList() {
                                                 </Td>
                                                 <Td>
                                                     <Box>
-                                                        <Text fontWeight="bold">{user.name}</Text>
+                                                        <Link color="blue.400" onMouseEnter={() => handlePrefetchUser(user.id)}>
+                                                            <Text fontWeight="bold">{user.name}</Text>
+                                                        </Link>
                                                         <Text fontSize="sm" color="gray.300">{user.email}</Text>
                                                     </Box>
                                                 </Td>
@@ -97,10 +113,10 @@ export default function UserList() {
                                 </Tbody>
                             </Table>
 
-                            <Pagination 
-                            totalCountOfRegisters={data.totalCount}
-                            currentPage={page}
-                            onPageChange={setPage}/>
+                            <Pagination
+                                totalCountOfRegisters={data.totalCount}
+                                currentPage={page}
+                                onPageChange={setPage} />
                         </>
                     )}
 
